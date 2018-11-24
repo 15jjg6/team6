@@ -19,10 +19,14 @@ def pageRead(url):
         if listOfPrices[i][0:21] == '<td class="prcl-fir">':
             item = stringSearch.search(str(listOfPrices[i])).group(1)
             price = stringSearch.search(str(listOfPrices[i+2])).group(1)
-            itemsAndPrices.update( {item : price} )
+            itemsAndPrices.update({item : price})
 
     restaurantName = re.compile(r"<title>(.*?) Menu and Prices Today - Dandy Kat</title>")
-    name = restaurantName.search(str(soup.find_all('title'))).group(1)
+    name = restaurantName.search(str(soup.find_all('title')))
+    if name != None:
+        name = name.group(1)
+    else:
+        name = '#NNF#'
 
     return [name, itemsAndPrices]
 
@@ -55,4 +59,6 @@ urls = ['https://www.dandykat.com/menu/blaze-pizza/index.html',
 import pprint
 
 for url in urls:
-    pprint.pprint(pageRead(url))
+    info = pageRead(url)
+    name = info[0]
+    print(name)
